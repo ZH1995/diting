@@ -2,12 +2,13 @@ package model
 
 /*
 
-CREATE DATABASE IF NOT EXISTS diting;
+CREATE DATABASE IF NOT EXISTS diting DEFAULT CHARSET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS article (
+CREATE TABLE IF NOT EXISTS hot_item (
 	id             BIGINT UNSIGNED    PRIMARY KEY AUTO_INCREMENT    COMMENT '主键ID',
 	title          VARCHAR(255)       NOT NULL DEFAULT ''           COMMENT '标题',
 	url            VARCHAR(500)       NOT NULL DEFAULT ''           COMMENT '链接',
+	item_rank      TINYINT UNSIGNED   NOT NULL DEFAULT 0            COMMENT '排名',
 	content        VARCHAR(500)       NOT NULL DEFAULT ''           COMMENT '内容(前500字)',
 	author         VARCHAR(100)       DEFAULT ''                    COMMENT '作者',
 	publish_time   BIGINT             DEFAULT 0                     COMMENT '发布时间',
@@ -18,15 +19,16 @@ CREATE TABLE IF NOT EXISTS article (
 	UNIQUE KEY `uk_title_hash` (`title_hash`),
 	KEY `idx_source` (`source`),
 	KEY `idx_publish_time` (`publish_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '文章表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '热门条目表';
 
 
 */
 
-type Article struct {
+type HotItem struct {
 	ID          uint64 `json:"id"`
 	Title       string `json:"title"`
 	URL         string `json:"url"`
+	ItemRank    uint8  `json:"item_rank"`
 	Content     string `json:"content"`
 	Author      string `json:"author"`
 	PublishTime int64  `json:"publish_time"`

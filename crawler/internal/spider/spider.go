@@ -10,5 +10,5 @@ type Spider interface {
 	Domain() string
 	StartURLs() []string
 	RegisterHandlers(c *colly.Collector)
-	ParseResponse(c *colly.Collector, e *colly.Response) (*model.Article, error)
+	ParseResponse(c *colly.Collector, e *colly.Response) (*model.HotItem, error)
 }

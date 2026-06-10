@@ -28,6 +28,6 @@ func (s *SiteASpider) RegisterHandlers(c *colly.Collector) {
 	})
 }
 
-func (s *SiteASpider) ParseResponse(c *colly.Collector, e *colly.Response) (*model.Article, error) {
-	return &model.Article{}, nil
+func (s *SiteASpider) ParseResponse(c *colly.Collector, e *colly.Response) (*model.HotItem, error) {
+	return &model.HotItem{}, nil
 }
