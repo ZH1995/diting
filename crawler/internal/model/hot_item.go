@@ -1,5 +1,10 @@
 package model
 
+// 各平台来源标识
+const (
+	SourceBilibili uint8 = 1 // B站
+)
+
 /*
 
 CREATE DATABASE IF NOT EXISTS diting DEFAULT CHARSET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;

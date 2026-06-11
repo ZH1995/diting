@@ -6,8 +6,10 @@ import (
 )
 
 func main() {
+	// 注册所有的spider
 	spiders := []spider.Spider{
-		&spider.SiteASpider{},
+		&spider.BilibiliSpider{},
 	}
+	// 启动爬虫
 	collector.Run(spiders)
 }
