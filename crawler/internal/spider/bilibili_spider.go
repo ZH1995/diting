@@ -7,11 +7,18 @@ import (
 	"time"
 
 	"github.com/ZH1995/diting/crawler/internal/model"
+	"github.com/ZH1995/diting/crawler/internal/pipeline"
 	"github.com/ZH1995/diting/crawler/internal/util"
 	"github.com/gocolly/colly/v2"
 )
 
-type BilibiliSpider struct{}
+type BilibiliSpider struct {
+	pipeline pipeline.Pipeline
+}
+
+func NewBilibiliSpider(p pipeline.Pipeline) *BilibiliSpider {
+	return &BilibiliSpider{pipeline: p}
+}
 
 func (s *BilibiliSpider) Name() string {
 	return "bilibili"
@@ -22,16 +29,21 @@ func (s *BilibiliSpider) Domain() string {
 }
 
 func (s *BilibiliSpider) StartURLs() []string {
-	return []string{"https://api.bilibili.com/x/web-interface/popular"}
+	return []string{"https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1"}
 }
 
 func (s *BilibiliSpider) RegisterHandlers(c *colly.Collector) {
 	c.OnResponse(func(r *colly.Response) {
 		// 解析数据
-		_, err := s.ParseResponse(r)
+		items, err := s.ParseResponse(r)
 		if err != nil {
 			log.Println("parse error:", err)
 			return
+		}
+		for _, item := range items {
+			if err := s.pipeline.Process(item); err != nil {
+				log.Printf("pipeline process error: %v", err)
+			}
 		}
 	})
 }
@@ -60,8 +72,7 @@ func (s *BilibiliSpider) ParseResponse(r *colly.Response) ([]*model.HotItem, err
 			UpdateTime:  unixTime,
 		})
 	}
-	b, _ := json.MarshalIndent(items, "", "  ")
-	fmt.Println(string(b))
+
 	return items, nil
 }
 
@@ -71,6 +82,7 @@ func (s *BilibiliSpider) Config() SpiderConfig {
 		Parallelism:    3,
 		Delay:          500 * time.Millisecond,
 		CronExpr:       "0 */30 * * * *",
+		Referer:        "https://www.bilibili.com/v/popular/all",
 	}
 }
 

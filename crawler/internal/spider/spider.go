@@ -26,4 +26,5 @@ type SpiderConfig struct {
 	UserAgent      string        // User-Agent
 	Timeout        time.Duration // HTTP超时
 	CronExpr       string        // 调度cron表达式（如 "0 */30 * * * *" 每30分钟）
+	Referer        string
 }

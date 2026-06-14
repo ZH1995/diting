@@ -37,6 +37,13 @@ func NewCollector(cfg spider.SpiderConfig) *colly.Collector {
 	if cfg.Timeout > 0 {
 		c.SetRequestTimeout(cfg.Timeout)
 	}
+	// 设置Referer
+	c.OnRequest(func(r *colly.Request) {
+		if cfg.Referer != "" {
+			r.Headers.Set("Referer", cfg.Referer)
+		}
+	})
+
 	return c
 }
 
@@ -47,6 +54,7 @@ func mergeConfig(custom spider.SpiderConfig) spider.SpiderConfig {
 		RandomDelay: 200 * time.Millisecond,
 		UserAgent:   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
 		Timeout:     10 * time.Second,
+		Referer:     "",
 	}
 	if custom.Parallelism > 0 {
 		cfg.Parallelism = custom.Parallelism
@@ -68,6 +76,9 @@ func mergeConfig(custom spider.SpiderConfig) spider.SpiderConfig {
 	}
 	if custom.CronExpr != "" {
 		cfg.CronExpr = custom.CronExpr
+	}
+	if custom.Referer != "" {
+		cfg.Referer = custom.Referer
 	}
 	return cfg
 }

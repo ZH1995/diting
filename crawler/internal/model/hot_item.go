@@ -30,15 +30,15 @@ CREATE TABLE IF NOT EXISTS hot_item (
 */
 
 type HotItem struct {
-	ID          uint64 `json:"id"`
-	Title       string `json:"title"`
-	URL         string `json:"url"`
-	ItemRank    uint8  `json:"item_rank"`
-	Content     string `json:"content"`
-	Author      string `json:"author"`
-	PublishTime int64  `json:"publish_time"`
-	Source      uint8  `json:"source"`
-	TitleHash   string `json:"title_hash"`
-	CreateTime  int64  `json:"create_time"`
-	UpdateTime  int64  `json:"update_time"`
+	ID          uint64 `gorm:"primaryKey;autoIncrement" json:"id"`
+	Title       string `gorm:"type:varchar(255);not null;default:''" json:"title"`
+	URL         string `gorm:"type:varchar(500);not null;default:''" json:"url"`
+	ItemRank    uint8  `gorm:"type:tinyint unsigned;not null;default:0" json:"item_rank"`
+	Content     string `gorm:"type:varchar(500);not null;default:''" json:"content"`
+	Author      string `gorm:"type:varchar(100);default:''" json:"author"`
+	PublishTime int64  `gorm:"type:bigint;default:0" json:"publish_time"`
+	Source      uint8  `gorm:"type:tinyint unsigned;default:0" json:"source"`
+	TitleHash   string `gorm:"type:char(32);not null;uniqueIndex:uk_title_hash" json:"title_hash"`
+	CreateTime  int64  `gorm:"type:bigint;default:0" json:"create_time"`
+	UpdateTime  int64  `gorm:"type:bigint;default:0" json:"update_time"`
 }
